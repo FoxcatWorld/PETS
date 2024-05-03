@@ -1,13 +1,25 @@
 <?php
+    include('../../config/database.php');
 
     $fullname = $_POST['fname'];
     $email = $_POST['email'];
     $passwd = $_POST['passwd'];
     $enc_pass = md5($passwd);
 
-    echo "Your fullname: ". $fullname."<br>";
-    echo "Your Email: ". $email."<br>";
-    echo "Your Password: ". $passwd."<br>" ;
-    echo "Your Password Enc". $enc_pass;
+    $sql = "
+        INSERT INTO users (fullname, email, password) 
+            VALUES ('$fullname', '$email','$enc_pass')
+    ";
 
+    $ans = pg_query($conn,$sql);
+    if ($ans){
+        echo "User has been created successfully";
+    }else{
+        echo "Error: " . pg_last_error();
+    }
+
+    //Close connection
+    pg_close($conn)
+
+    
 ?>
